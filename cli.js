@@ -6,8 +6,19 @@ const { connectToDatabase } = require('./util/db')
 
 const blogsRouter = require('./controllers/blogs')
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'SyntaxError') {
+    return response.status(400).send({ error: 'Wrong request body' })
+  } 
+
+  next(error)
+}
+
 app.use(express.json())
 app.use('/api/blogs', blogsRouter)
+app.use(errorHandler)
 
 const start = async () => {
   await connectToDatabase()
