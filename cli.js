@@ -41,4 +41,15 @@ const start = async () => {
   })
 }
 
+app.post('/api/reset', async (req, res) => {
+  await Blog.destroy({ where: {} })
+  await User.destroy({ where: {} })
+
+  res.status(204).end()
+})
+
+app.get('/', (req, res) => {
+  res.status(200).send('HTTP 200')
+})
+
 start()
