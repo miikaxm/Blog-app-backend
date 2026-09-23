@@ -46,9 +46,16 @@ router.post('/', tokenExtractor, async (req, res, next) => {
   }
 })
 
-router.delete('/:id', blogFinder, async (req, res) => {
-  await req.blog.destroy()
-  res.status(204).end()
+router.delete('/:id', tokenExtractor, blogFinder, async (req, res, next) => {
+  try {
+    if (req.blog.userId !== req.decodedToken.id) {
+      return res.status(403).json({ error: 'unauthorized' })
+    }
+    await req.blog.destroy()
+    return res.status(204).end()
+  } catch (error) {
+    next(error)
+  }
 })
 
 router.put('/:id', blogFinder, async (req, res, next) => {
