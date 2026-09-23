@@ -3,7 +3,6 @@ const router = require('express').Router()
 
 const { SECRET } = require('../util/config')
 const User = require('../models/user')
-const { response } = require('express')
 
 router.post('/', async (req, res) => {
   const body = req.body
