@@ -3,6 +3,9 @@ const { User, Blog } = require('../models')
 
 router.get('/', async (req, res) => {
   const users = await User.findAll({
+    attributes: {
+      exclude: ['password']
+    },
     include: {
       model: Blog,
       attributes: {
@@ -23,7 +26,11 @@ router.post('/', async (req, res, next) => {
 })
 
 router.get('/:id', async (req, res) => {
-  const user = await User.findByPk(req.params.id)
+  const user = await User.findByPk(req.params.id, {
+    attributes: {
+      exclude: ['password']
+    }
+  })
   if (user) {
     res.json(user)
   } else {
