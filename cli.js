@@ -3,7 +3,7 @@ const app = express()
 
 const { PORT } = require('./util/config')
 const { connectToDatabase } = require('./util/db')
-const { syncModels } = require('./models')
+const { syncModels, Blog, User } = require('./models')
 
 const blogsRouter = require('./controllers/blogs')
 const usersRouter = require('./controllers/users')
