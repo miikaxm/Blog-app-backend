@@ -11,3 +11,8 @@ CREATE TABLE blogs (
 insert into blogs (author, url, title) values ('Miika Valkonen', 'https://aiven.io/', 'testi blogi yksi');
 insert into blogs (author, url, title) values ('Miika Valkonen', 'https://aiven.io/', 'testi blogi kaksi');
 insert into blogs (author, url, title) values ('Miika Valkonen', 'https://aiven.io/', 'testi blogi kolme');
+
+-- DROP ALL TABLES
+drop table blogs;
+drop table users;
+drop table migrations;
