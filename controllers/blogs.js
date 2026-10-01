@@ -65,7 +65,7 @@ router.post('/', tokenExtractor, sessionExtractor, async (req, res, next) => {
 
 router.delete('/:id', tokenExtractor, sessionExtractor, blogFinder, async (req, res, next) => {
   try {
-    if (req.blog.userId !== req.decodedToken.id) {
+    if (req.blog.userId !== req.user.id) {
       return res.status(401).json({ error: 'unauthorized' })
     }
     await req.blog.destroy()
@@ -75,18 +75,14 @@ router.delete('/:id', tokenExtractor, sessionExtractor, blogFinder, async (req, 
   }
 })
 
-router.put('/:id', tokenExtractor, sessionExtractor, blogFinder, async (req, res, next) => {
+router.put('/:id', blogFinder, async (req, res, next) => {
   try {
-    if (req.blog.userId !== req.decodedToken.id) {
-      return res.status(401).json({ error: 'unauthorized' })
-    }
     req.blog.likes = req.body.likes
     await req.blog.save()
     res.json(req.blog)
-  } catch(error) {
+  } catch (error) {
     next(error)
   }
-    
 })
 
 module.exports = router

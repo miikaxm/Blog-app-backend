@@ -50,11 +50,21 @@ router.get('/:id', async (req, res) => {
     }
   ]
   })
-  if (user) {
-    res.json(user)
-  } else {
-    res.status(400).end()
+
+  if (!user) {
+    return res.status(404).end()
   }
+
+  const userJson = user.toJSON()
+
+  userJson.readings = userJson.reading_list.map(blog => ({
+    ...blog,
+    reading_list: blog.read_list
+  }))
+
+  delete userJson.reading_list
+
+  res.json(userJson)
 })
 
 router.put('/:username', async (req, res) => {

@@ -14,7 +14,9 @@ const logoutRouter = require('./controllers/logout')
 
 // Error handler middleware
 const errorHandler = (error, request, response, next) => {
-  console.error(error.message)
+  console.error('ERROR:', error)
+  console.error('MESSAGE:', error.message)
+  console.error('NAME:', error.name)
 
   if (error.name === 'SequelizeValidationError') {
     return response.status(400).send({
@@ -23,8 +25,10 @@ const errorHandler = (error, request, response, next) => {
   }
 
   if (error.name === 'SyntaxError') {
-    return response.status(400).send({ error: 'Wrong request body' })
-  } 
+    return response.status(400).send({
+      error: 'Wrong request body'
+    })
+  }
 
   next(error)
 }
