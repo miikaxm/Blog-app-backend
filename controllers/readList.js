@@ -1,8 +1,9 @@
 const { ReadList } = require('../models')
 const { tokenExtractor } = require('../middleware/tokenExtractor')
+const { sessionExtractor } = require('../middleware/sessionExtractor')
 const router = require('express').Router()
 
-router.post('/', async (req, res, next) => {
+router.post('/', tokenExtractor, sessionExtractor, async (req, res, next) => {
   try {
     const readList = await ReadList.create(req.body)
     res.json(readList)
@@ -11,7 +12,7 @@ router.post('/', async (req, res, next) => {
   }
 })
 
-router.put('/:id', tokenExtractor, async (req, res) => {
+router.put('/:id', tokenExtractor, sessionExtractor, async (req, res) => {
   const readListBlog = await ReadList.findOne({
     where: {
       id: req.params.id

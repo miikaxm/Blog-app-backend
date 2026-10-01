@@ -2,6 +2,7 @@ const router = require('express').Router()
 const { Blog, User } = require('../models')
 const { Op } = require('sequelize')
 const { tokenExtractor } = require('../middleware/tokenExtractor')
+const { sessionExtractor } = require('../middleware/sessionExtractor')
 
 const blogFinder = async (req, res, next) => {
   try {
@@ -13,7 +14,6 @@ const blogFinder = async (req, res, next) => {
   } catch (error) {
     next(error)
   }
-    
 }
 
 router.get('/', async (req, res) => {
@@ -48,7 +48,7 @@ router.get('/', async (req, res) => {
   res.json(blogs)
 })
 
-router.post('/', tokenExtractor, async (req, res, next) => {
+router.post('/', tokenExtractor, sessionExtractor, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.decodedToken.id)
     const blog = await Blog.create({...req.body, date: new Date(), userId: user.id})
@@ -66,10 +66,10 @@ router.post('/', tokenExtractor, async (req, res, next) => {
   }
 })
 
-router.delete('/:id', tokenExtractor, blogFinder, async (req, res, next) => {
+router.delete('/:id', tokenExtractor, sessionExtractor, blogFinder, async (req, res, next) => {
   try {
     if (req.blog.userId !== req.decodedToken.id) {
-      return res.status(403).json({ error: 'unauthorized' })
+      return res.status(401).json({ error: 'unauthorized' })
     }
     await req.blog.destroy()
     return res.status(204).end()
@@ -78,8 +78,11 @@ router.delete('/:id', tokenExtractor, blogFinder, async (req, res, next) => {
   }
 })
 
-router.put('/:id', blogFinder, async (req, res, next) => {
+router.put('/:id', tokenExtractor, sessionExtractor, blogFinder, async (req, res, next) => {
   try {
+    if (req.blog.userId !== req.decodedToken.id) {
+      return res.status(401).json({ error: 'unauthorized' })
+    }
     req.blog.likes = req.body.likes
     await req.blog.save()
     res.json(req.blog)

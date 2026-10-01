@@ -20,6 +20,11 @@ module.exports = {
             password: {
                 type: DataTypes.STRING,
                 allowNull: false
+            },
+            disabled: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: false
             }
         })
         await queryInterface.createTable('blogs', {

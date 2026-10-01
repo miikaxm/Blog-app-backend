@@ -13,6 +13,8 @@ insert into blogs (author, url, title) values ('Miika Valkonen', 'https://aiven.
 insert into blogs (author, url, title) values ('Miika Valkonen', 'https://aiven.io/', 'testi blogi kolme');
 
 -- DROP ALL TABLES
+drop table migrations;
+drop table session;
+drop table read_list;
 drop table blogs;
 drop table users;
-drop table migrations;
