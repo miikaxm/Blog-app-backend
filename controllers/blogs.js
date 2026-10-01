@@ -51,17 +51,16 @@ router.get('/', async (req, res) => {
 router.post('/', tokenExtractor, sessionExtractor, async (req, res, next) => {
   try {
     const user = await User.findByPk(req.decodedToken.id)
-    const blog = await Blog.create({...req.body, date: new Date(), userId: user.id})
 
-    if (req.body.year < 1991 || req.body.year > new Date().getFullYear()) {
-      return res.status(401).json({
+    if (req.body.year && (req.body.year < 1991 || req.body.year > new Date().getFullYear())) {
+      return res.status(400).json({
         error: `Year must be from 1991 to ${new Date().getFullYear()}`
       })
     }
-    else {
-      return res.json(blog)
-    }
-  } catch(error) {
+    
+    const blog = await Blog.create({...req.body, date: new Date(), userId: user.id})
+    return res.status(201).json(blog)
+  } catch (error) {
     next(error)
   }
 })
