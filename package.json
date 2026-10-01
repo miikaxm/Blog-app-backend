@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "node cli.js",
-    "test": "cross-env TESTING=true node --test --test-concurrency=1 tests/api_ch3.test.js",
+    "test": "TESTING=true node --test --test-concurrency=1",
     "start:test": "cross-env TESTING=true node cli.js"
   },
   "dependencies": {
